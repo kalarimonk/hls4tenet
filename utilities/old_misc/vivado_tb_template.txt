@@ -1,0 +1,17 @@
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h__ADDRESS__; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h__DATA__; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
