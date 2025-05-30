@@ -1,0 +1,25 @@
+
+#include "./hls_dispatcher.h"
+
+
+void dispatch_tensor_contraction(
+    tensor_t *inputl,
+    tensor_t *inputr,
+    const Tensor3D &tensor_d1,
+    const tensor_t *weight_arr,	
+    tensor_t *output_t)
+{
+
+switch (tensor_d1.config_id) {
+
+__TEMPLATE_STR_START__
+	case __CONFIG_ID__:
+		tensor_contraction_new<__DIM1__, __DIM2__, __DIM3__>(inputl, inputr, tensor_d1, weight_arr, output_t);
+		break;
+__TEMPLATE_STR_END__
+	default:
+		// Optional: handle error
+		break;
+
+	}
+}

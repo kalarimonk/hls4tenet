@@ -1,0 +1,11 @@
+#ifndef TENSORS_H
+#define TENSORS_H
+
+#include "./hls_tensor.h"
+
+const Tensor3D tensor_d[__NUM_NODES__] = { __tensor_metadata__ };
+
+const tensor_t w1d[__NUM_WEIGHTS__] = {__tensor_values__};
+
+
+#endif

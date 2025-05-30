@@ -1,0 +1,38 @@
+#ifndef HLS_TENSOR_H
+#define HLS_TENSOR_H
+
+#include <ap_fixed.h>
+
+#define NUM_FEATURES __FEATURES__
+#define IN_MAP_DIM __IN_DIM__
+
+#define MAX_BOND_DIM __MAX_BOND_DIM__
+
+#define NUM_NODES __NUM_NODE__
+#define NUM_PARAM __NUM_WEIGHTS__
+#define ROOT_NODE_DIM __CLASSES__
+
+#define HEIGHT __HEIGHT__
+#define BOTTOM_NODES __LAST_LAYER_COUNT__
+
+#define BITS_PACKED __BITS_PACKED__
+
+typedef ap_fixed<16,2> tensor_t;
+typedef unsigned long size_t;
+
+/*
+ * Structure to be used when scaling and dynamically introducing weights etc
+ * dim1: Left Left Dimension,
+ * dim2: Right Link Dimension,
+ * dim3: Top Link Dimension (Internal Bond Dimension)
+ * start_idx: Index to access the current weight tensor from the flattened 1D Weights Array
+ */
+struct Tensor3D{
+    int dim1;
+    int dim2;
+    int dim3;
+    int start_idx;
+    int config_id;
+};
+
+#endif

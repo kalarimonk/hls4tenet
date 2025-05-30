@@ -1,0 +1,816 @@
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h10; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1255; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h18; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1a6b; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h20; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h5075; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h28; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hcf3; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h30; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h32c; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h38; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h34bf; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h40; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h324d; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h48; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hff75; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h50; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h5c6c; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h58; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hfe37; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h60; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'heca4; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h68; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hf4d; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h70; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1e09; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h78; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h28f3; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h80; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hf44b; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h88; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1d9b; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h90; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hc553; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h98; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hf442; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'ha0; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'he18a; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'ha8; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h70b; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hb0; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h27c5; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hb8; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'he141; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hc0; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'heda7; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hc8; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h133a; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hd0; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hf386; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hd8; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1099; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'he0; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hee05; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'he8; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1d82; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hf0; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hea2e; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'hf8; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hdf86; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h100; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h341c; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h108; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h3854; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h110; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hd278; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h118; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hfcf8; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h120; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hdffd; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h128; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1902; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h130; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h340f; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h138; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hdc17; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h140; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'he918; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h148; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h22f7; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h150; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h1972; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h158; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h31e8; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h160; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hd8a9; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h168; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h2696; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h170; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hf13b; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h178; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'hfb99; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h180; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h28c1; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
+ // Write example control register via AXI-Lite
+@(posedge ap_clk);
+s_axi_control_AWVALID = 1;
+s_axi_control_AWADDR = 9'h188; //8'h00;
+
+@(posedge ap_clk);
+if (s_axi_control_AWREADY) s_axi_control_AWVALID = 0;
+
+s_axi_control_WVALID = 1;
+s_axi_control_WDATA = 32'h2a65; //32'hDEADBEEF;
+
+@(posedge ap_clk);
+if (s_axi_control_WREADY) s_axi_control_WVALID = 0;
+
+// Wait for write response
+wait (s_axi_control_BVALID);
+s_axi_control_BREADY = 1;
