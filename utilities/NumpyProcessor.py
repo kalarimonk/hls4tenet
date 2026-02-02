@@ -29,7 +29,7 @@ class NumpyFileProcessor:
         """Convert a .npy file to a text file."""
         print(f"Processing .npy file: {npy_file}")
         array_data = (np.load(npy_file)).flatten()
-        print(len(array_data))
+        # print(len(array_data))
         array_data.astype(np.float64).tofile(output_file)
         # np.savetxt(output_file, array_data.flatten(), fmt='%s', delimiter=',')
         print(f"Saved .npy as text file: {output_file}")

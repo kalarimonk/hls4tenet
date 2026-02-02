@@ -1,3 +1,9 @@
+# Misc workspace and ide folder exclusion
+/*_workspace*
+/_ide
+/hls4tenet
+/hls_compo*
+
 # Ignore build output directory
 /build
 /export
@@ -5,10 +11,12 @@
 /run_tenet
 /.cache/
 /utilities/__pycache__/
+
 # Ignore object files and dependent files
 *.o
 *.d
 *.json
+dfx_runtime.txt
 
 #Ignore logs folder and log files
 /logs
