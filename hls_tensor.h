@@ -18,7 +18,7 @@
 #define BITS_PACKED 512
 
 typedef ap_fixed<16,2> tensor_t;
-typedef unsigned long size_t;
+// typedef unsigned long size_t;
 
 /*
  * Structure to be used when scaling and dynamically introducing weights etc

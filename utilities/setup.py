@@ -2,7 +2,10 @@ import argparse
 import re
 import os
 import numpy as np
+import subprocess
 from NumpyProcessor import NumpyFileProcessor
+from utilities.ArgParser import get_tenet_args
+# from run_vitis_simulation import run_vitis_operation
 
 
 
@@ -90,22 +93,15 @@ def generate_tensor_data(template_path, output_path, processor):
     }    
     generate_header(template_path, output_path, replacements)
 
-def main():
-    parser = argparse.ArgumentParser(description = "Process the dataset to obtain binaries for HLS processing")
-    parser.add_argument("directory_path", type = str, help = "Path to the dataset to be processed")
-    parser.add_argument("--top-iso-ttn", action = "store_true", help = "Top-Isometrized TTN")
-    args = parser.parse_args()
+def main(args):
+
     is_top_iso = args.top_iso_ttn
-    
-    print(is_top_iso)
+    print('\nc: ',args.csim, '\t b:', args.build, '\tp:', args.pack)
     
     base_directory = args.directory_path
     processor = NumpyFileProcessor(base_directory, is_top_iso)
     processor.process_directory(base_directory, base_directory + "/processed")
     
-    
-
-
     print(f"Total number of nodes in the tree: {processor.get_num_node()}")
     print(f"Max Bond Dimensions: {processor.get_max_bond_dimension()}")
     print(f"Total number of weights: {processor.get_total_weights()}")
@@ -119,5 +115,25 @@ def main():
     generate_tensor_data(WEIGHT_TEMPLATE, "../hls_weights.h", processor)
     generate_dispatcher(DISPATCHER_TEMPLATE,"../hls_dispatcher.cpp", processor)
 
+
+def launch_vitis_subprocess(args):
+    arg_str = "-"
+    if args.csim:
+        arg_str+="c"
+    if args.build:
+        arg_str+="b"
+    if args.pack:
+        args_str+="p"
+
+    print("Vitis arg string:", arg_str)
+
+    subprocess.run("vitis -s run_vitis_simulation.py {arg_str}", shell=True)
+    
+
 if __name__ == "__main__":
-    main()
+    print("--------------------Initializing TENET--------------------")
+    print("[INFO]:Tasks Scheduled:")
+    print("[INFO]:TTN Model Processing and HLS Generation.")
+    args = get_tenet_args()
+    # main(args)
+    launch_vitis_subprocess(args)
