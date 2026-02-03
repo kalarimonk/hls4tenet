@@ -4,7 +4,7 @@ import os
 import numpy as np
 import subprocess
 from NumpyProcessor import NumpyFileProcessor
-from utilities.ArgParser import get_tenet_args
+from ArgParser import tenet_args
 # from run_vitis_simulation import run_vitis_operation
 
 
@@ -96,7 +96,6 @@ def generate_tensor_data(template_path, output_path, processor):
 def main(args):
 
     is_top_iso = args.top_iso_ttn
-    print('\nc: ',args.csim, '\t b:', args.build, '\tp:', args.pack)
     
     base_directory = args.directory_path
     processor = NumpyFileProcessor(base_directory, is_top_iso)
@@ -114,6 +113,7 @@ def main(args):
     generate_macro_header(TEMPLATE_FILE, "../hls_tensor.h", processor)
     generate_tensor_data(WEIGHT_TEMPLATE, "../hls_weights.h", processor)
     generate_dispatcher(DISPATCHER_TEMPLATE,"../hls_dispatcher.cpp", processor)
+    print("\n")
 
 
 def launch_vitis_subprocess(args):
@@ -123,17 +123,20 @@ def launch_vitis_subprocess(args):
     if args.build:
         arg_str+="b"
     if args.pack:
-        args_str+="p"
+        arg_str+="p"
 
-    print("Vitis arg string:", arg_str)
-
-    subprocess.run("vitis -s run_vitis_simulation.py {arg_str}", shell=True)
+    if arg_str == "-":
+        print("[TENET-INFO]: No Vitis tasks scheduled. Skipping Vitis simulation launch.")
+        return
+    else:
+        print("--------------------Launching Vitis Simulation Subprocess--------------------\n")
+        subprocess.run("vitis -s run_vitis_simulation.py " + arg_str, shell=True)
     
 
 if __name__ == "__main__":
     print("--------------------Initializing TENET--------------------")
-    print("[INFO]:Tasks Scheduled:")
-    print("[INFO]:TTN Model Processing and HLS Generation.")
-    args = get_tenet_args()
-    # main(args)
+    print("[TENET-INFO]: Tasks Scheduled:")
+    print("[TENET-INFO]: TTN Model Processing and HLS Generation.")
+    args = tenet_args()
+    main(args)
     launch_vitis_subprocess(args)
