@@ -3,6 +3,10 @@
 /_ide
 /hls4tenet
 /hls_compo*
+/*.vscode/
+*__pycache__
+*.wsdata
+*.Xil
 
 # Ignore build output directory
 /build

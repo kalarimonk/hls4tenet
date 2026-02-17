@@ -9,9 +9,9 @@ from ArgParser import tenet_args
 
 
 
-TEMPLATE_FILE = "./header_templates/tenet.h.in"
-WEIGHT_TEMPLATE = "./header_templates/tensors.h.in"
-DISPATCHER_TEMPLATE = "./header_templates/dispatcher.h.in"
+TEMPLATE_FILE = "../templates/tenet.h.in"
+WEIGHT_TEMPLATE = "../templates/tensors.h.in"
+DISPATCHER_TEMPLATE = "../templates/dispatcher.h.in"
 
 def generate_dispatcher(template_path, output_path, processor):
     with open(template_path, 'r') as file:
