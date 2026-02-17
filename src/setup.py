@@ -130,7 +130,7 @@ def launch_vitis_subprocess(args):
         return
     else:
         print("--------------------Launching Vitis Simulation Subprocess--------------------\n")
-        subprocess.run("vitis -s run_vitis_simulation.py " + arg_str, shell=True)
+        subprocess.run("vitis -s run_vitis_tasks.py " + arg_str, shell=True)
     
 
 if __name__ == "__main__":
