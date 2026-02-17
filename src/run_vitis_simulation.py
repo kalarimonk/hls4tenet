@@ -13,7 +13,9 @@ def run_vitis_operation(args):
     parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 
     print("--------------------Creating Vitis Client--------------------")
+    
     client = vitis.create_client()
+    
 
     try:
         client.set_workspace(path=workspace_path)
@@ -49,6 +51,7 @@ def run_vitis_operation(args):
 
     finally:
         # Always dispose to release locks
+        print("Disposing Vitis")
         vitis.dispose()
 
 
