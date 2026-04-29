@@ -34,8 +34,6 @@ include = ["src/hls_tenet/templates/*.in"]
 include = [
   "src/hls_tenet",
   "README.md",
-  "hls_config.cfg",
-  "templates/*.in",
 ]
 
 [tool.ruff]

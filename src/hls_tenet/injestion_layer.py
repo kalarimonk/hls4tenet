@@ -10,6 +10,4 @@ class TNModel(ABC):
     def format():
         pass
 
-
-class tn4mlModel(TNModel):
-    
+# Will be used to better structure the code and to make it more modular. This will be the base class for all the models that we will use in the future.

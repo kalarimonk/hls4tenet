@@ -15,7 +15,15 @@ This project provides a CLI-first workflow to process TTN datasets/models, gener
 pipx install hls-tenet
 ```
 
-### Developers
+## Developer Usage
+
+First create a virtual environment
+
+```
+python -m venv dev(or whatever you like)
+```
+
+Then you can install the requirements 
 
 ```bash
 python -m pip install -e .[dev]
@@ -36,20 +44,19 @@ python -m hls_tenet --help
 ```
 ### Example
 
-tenet ./datasets/mps_data/MPS_poly_N4.pkl ./datasets/mps_data/ mps -c --tb_data ./testbench_data/X_N4_embedded.bin
+tenet ./datasets/mps_data/MPS_poly_N4.pkl  mps -c --tb_data ./datasets/mps_data/X_N4_embedded.bin
 
 ```
 ```
 Options:
 
-tenet -h
-usage: tenet [-h] [-c] [-tb TB_DATA] [-b] [-p] model_path directory_path {mps,ttn}
+$ tenet -h
+usage: tenet [-h] [-c] [-tb TB_DATA] [-b] [-p] model_path {mps,ttn}
 
 Process dataset/model files and generate HLS artifacts for TENET
 
 positional arguments:
   model_path            Path to model file (e.g. .pkl, .npz)
-  directory_path        Path to data directory
   {mps,ttn}             Tensor Network Structure
 
 optional arguments:
@@ -75,7 +82,5 @@ Then run TENET commands as above.
 - `CI` workflow validates lint, tests, CLI smoke test, and build artifacts on pushes/PRs.
 - `Release` workflow publishes to PyPI on git tags matching `v*`.
 
-## Notes
 
-- If Vitis reports a locked workspace, use a different `--workspace` path or remove the stale lock/workspace directory.
-- `hls_config.cfg` should include valid absolute paths for `csim.argv` inputs/outputs.
+

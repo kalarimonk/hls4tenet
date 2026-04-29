@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                 index += PRECISION;
             }
         }
-        cout << "\n\nSample:" << n << endl;
+        //cout << "\n\nSample:" << n << endl;
         sample_new.write(packed);
         run_tenet(sample_new, output);
 
@@ -75,8 +75,8 @@ int main(int argc, char *argv[])
             if (!output[k].empty())
             {
                 out[k] = output[k].read();
-                result_file << setprecision(PRECISION - 2) << out[k] << endl;
-                cout << "out" << k << ":" << out[k]  << setprecision(PRECISION - 2) << endl;
+                result_file << setprecision(PRECISION - 8) << out[k] << endl;
+                //cout << "out" << k << ":" << out[k]  << setprecision(PRECISION - 8) << endl;
             }
         }
     }

@@ -24,7 +24,7 @@ def tenet_args(argv=None):
     # parser_gen = subparsers.add_parser("generate", help="Generate HLS code and Vitis config")
     
     parser.add_argument("model_path", type=Path, help="Path to model file (e.g. .pkl, .npz)")
-    parser.add_argument("directory_path",type=Path, help="Path to data directory")
+    # parser.add_argument("directory_path",type=Path, help="Path to data directory")
     parser.add_argument("tn",choices=["mps","ttn"], help="Tensor Network Structure")
     
     parser.add_argument("-c", "--csim", action="store_true", help="Run C-Simulation ")
@@ -134,9 +134,9 @@ def main(argv=None):
     if not args.model_path.exists():
         raise FileNotFoundError(f"Model file does not exist: {args.model_path}")
     
-    dataset_dir = args.directory_path.resolve()
-    if not dataset_dir.exists() or not dataset_dir.is_dir():
-        raise FileNotFoundError(f"Dataset directory does not exist: {dataset_dir}")
+    # dataset_dir = args.directory_path.resolve()
+    # if not dataset_dir.exists() or not dataset_dir.is_dir():
+    #     raise FileNotFoundError(f"Dataset directory does not exist: {dataset_dir}")
     
     configuration.model_files_path = args.model_path.resolve()
     configuration.output_dir = Path(os.getcwd()+os.sep+"generated_hls")
@@ -147,7 +147,7 @@ def main(argv=None):
         shutil.rmtree(configuration.output_dir)  # Deletes the directory recursively.  Clean slate for generation.
     
     configuration.output_dir.mkdir(parents=True, exist_ok=True)
-    configuration.dataset_directory = dataset_dir
+    # configuration.dataset_directory = dataset_dir
     
     if args.csim and not args.tb_data:
         print(f"Testbench data file is required for C-Simulation. eg: --tb_data x_test.bin")
