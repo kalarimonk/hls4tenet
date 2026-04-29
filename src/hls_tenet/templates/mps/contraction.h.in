@@ -1,0 +1,145 @@
+#ifndef HLS_CONTRACTION_H
+#define HLS_CONTRACTION_H
+
+#include "./hls_tensor.h"
+#include "./hls_weights.h"
+#include <iostream>
+
+template <int left_dim, int right_dim, int phy_dim>
+void left_boundary_contraction(tensor_t *data, const tensor_t (&site)[left_dim][right_dim][phy_dim], tensor_t *result)
+{
+
+	tensor_t accum[right_dim];
+
+	for (int i = 0; i < right_dim; i++)
+	{
+		accum[i] = 0;
+		for (int j = 0; j < left_dim; j++)
+		{
+			for (int k = 0; k < phy_dim; k++)
+			{
+				accum[i] += data[i] * site[j][i][k];
+			}
+		}
+	}
+
+	for (int i = 0; i < right_dim; i++)
+	{
+		result[i] = accum[i];
+		// std::cout << accum[i] << std::endl;
+	}
+	// std::cout << std::endl;
+}
+
+template <int left_dim, int right_dim, int phy_dim>
+void right_boundary_contraction(tensor_t *data, const tensor_t (&site)[left_dim][right_dim][phy_dim], tensor_t *result)
+{
+
+	tensor_t accum[left_dim];
+
+	for (int i = 0; i < left_dim; i++)
+	{
+		accum[i] = 0;
+		for (int j = 0; j < right_dim; j++)
+		{
+			for (int k = 0; k < phy_dim; k++)
+			{
+				accum[i] += data[i] * site[i][j][k];
+			}
+		}
+	}
+
+	for (int i = 0; i < left_dim; i++)
+	{
+		result[i] = accum[i];
+		// std::cout << accum[i] << std::endl;
+	}
+	// std::cout << std::endl;
+}
+
+// Right environment contraction for rank 3 tensor towards the label site
+template <int left_dim, int right_dim, int phy_dim>
+void renv_rank3_tensor_contraction(tensor_t *r_data, tensor_t *data, const tensor_t (&site)[left_dim][right_dim][phy_dim], tensor_t *result)
+{
+
+	tensor_t accum[left_dim];
+
+	for (int i = 0; i < left_dim; i++)
+	{
+		accum[i] = 0;
+		for (int j = 0; j < right_dim; j++)
+		{
+			for (int k = 0; k < phy_dim; k++)
+			{
+				tensor_t prod1 = r_data[j] * data[k];
+				accum[i] += prod1 * site[i][j][k];
+			}
+		}
+	}
+
+	for (int i = 0; i < left_dim; i++)
+	{
+		result[i] = accum[i];
+		// std::cout << accum[i] << std::endl;
+	}
+	// std::cout << std::endl;
+}
+
+// Left environment contraction for rank 3 tensor towards the label site
+template <int left_dim, int right_dim, int phy_dim>
+void lenv_rank3_tensor_contraction(tensor_t *l_data, tensor_t *data, const tensor_t (&site)[left_dim][right_dim][phy_dim], tensor_t *result)
+{
+
+	tensor_t accum[right_dim];
+
+	for (int i = 0; i < right_dim; i++)
+	{
+		accum[i] = 0;
+		for (int j = 0; j < left_dim; j++)
+		{
+			for (int k = 0; k < phy_dim; k++)
+			{
+				tensor_t prod1 = l_data[j] * data[k];
+				accum[i] += prod1 * site[j][i][k];
+			}
+		}
+	}
+
+	for (int i = 0; i < right_dim; i++)
+	{
+		result[i] = accum[i];
+	}
+}
+
+// Label site contraction which is a rank 4 tensor
+template <int left_dim, int right_dim, int phy_dim, int label_dim>
+void rank4_tensor_contraction(tensor_t *l_data, tensor_t *r_data, tensor_t *data, const tensor_t (&site)[left_dim][right_dim][phy_dim][label_dim], tensor_t *result)
+{
+
+	tensor_t accum[label_dim];
+
+	for (int i = 0; i < label_dim; i++)
+	{
+		accum[i] = 0;
+		for (int j = 0; j < left_dim; j++)
+		{
+			for (int k = 0; k < right_dim; k++)
+			{
+				for (int l = 0; l < phy_dim; l++)
+				{
+					// std::cout<< weight_idx << std::endl;
+					tensor_t prod1 = l_data[j] * r_data[k];
+					tensor_t prod2 = prod1 * data[l];
+					accum[i] += prod2 * site[j][k][l][i];
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < label_dim; i++)
+	{
+		result[i] = accum[i];
+	}
+}
+
+#endif

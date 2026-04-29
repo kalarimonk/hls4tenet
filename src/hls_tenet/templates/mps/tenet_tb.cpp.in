@@ -1,0 +1,88 @@
+#define AP_INT_MAX_W 2048
+#include <ap_int.h>
+#include <ap_fixed.h>
+
+#include "./hls_tensor.h"
+#include "./hls_tenet.h"
+
+#include <iostream>
+#include <fstream>
+#include <hls_stream.h>
+#include <math.h>
+#include <inttypes.h>
+
+#define NUM_SAMPLES 1000
+#define PRECISION 18
+
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    if (argc != 3)
+    {
+        cerr << "Usage: " << argv[0] << "<tb_data_path> <result_file_path>\n";
+        return 1;
+    }
+
+    const char *input_file_path = argv[1];
+    const char *result_file_path = argv[2];
+
+    
+
+    hls::stream<tensor_t> test_data[NUM_SAMPLES][NUM_FEATURES][PHY_BOND_DIM];
+    hls::stream<tensor_t> output[LABEL_DIM];
+
+    ofstream result_file(result_file_path, ios::out);
+    cout << result_file_path;
+    if (!result_file)
+    {
+        cerr << "Error opening file for writing results.\n";
+        return 1;
+    }
+
+    ifstream ifile(input_file_path, ios::binary);
+    if (!ifile)
+    {
+        cerr << "Error opening input data file\n";
+        return 1;
+    }
+
+    tensor_t out[LABEL_DIM];
+
+    for (int n = 0; n < NUM_SAMPLES; n++)
+    {
+        hls::stream<ap_uint<BITS_PACKED>> sample_new;
+        ap_uint<BITS_PACKED> packed = 0;
+
+        int index = 0;
+        for (int j = 0; j < NUM_FEATURES; j++)
+        {
+            double temp;
+            for (int k = 0; k < PHY_BOND_DIM; k++)
+            {
+                ifile.read(reinterpret_cast<char *>(&temp), sizeof(double));
+                tensor_t raw_bits = tensor_t(temp);
+                packed.range(index + PRECISION - 1, index) = raw_bits.range(PRECISION - 1, 0);
+                index += PRECISION;
+            }
+        }
+        cout << "\n\nSample:" << n << endl;
+        sample_new.write(packed);
+        run_tenet(sample_new, output);
+
+        for (int k = 0; k < LABEL_DIM; ++k)
+        {
+            if (!output[k].empty())
+            {
+                out[k] = output[k].read();
+                result_file << setprecision(PRECISION - 2) << out[k] << endl;
+                cout << "out" << k << ":" << out[k]  << setprecision(PRECISION - 2) << endl;
+            }
+        }
+    }
+
+    ifile.close();
+    result_file.close();
+
+    return 0;
+}

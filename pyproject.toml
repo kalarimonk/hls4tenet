@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling>=1.27.0", "hatch-vcs>=0.4.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hls-tenet"
+dynamic = ["version"]
+description = "CLI tool to generate TTN HLS sources and orchestrate Vitis HLS runs"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "TENET Contributors" }]
+dependencies = [
+  "numpy>=1.23",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.6",
+]
+
+[project.scripts]
+tenet = "hls_tenet.cli:main"
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.1.0"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hls_tenet"]
+include = ["src/hls_tenet/templates/*.in"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/hls_tenet",
+  "README.md",
+  "hls_config.cfg",
+  "templates/*.in",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["src"]

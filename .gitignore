@@ -1,6 +1,7 @@
 # Misc workspace and ide folder exclusion
 /*_workspace*
 /_ide
+/dev_env
 /hls4tenet
 /hls_compo*
 /*.vscode/
@@ -10,17 +11,28 @@
 
 # Ignore build output directory
 /build
+/dist
+/generated_hls
+/hls
 /export
 /datasets/
 /run_tenet
+/testbench_data
 /.cache/
 /utilities/__pycache__/
+.pytest_cache/
+.ruff_cache/
+/.ipynb_checkpoints/
+
+# Add later
+/.github/
 
 # Ignore object files and dependent files
 *.o
 *.d
 *.json
 dfx_runtime.txt
+
 
 #Ignore logs folder and log files
 /logs
