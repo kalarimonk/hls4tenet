@@ -23,7 +23,6 @@ fonttools==4.60.2
 fsspec==2025.10.0
 funcy==2.0
 greenlet==3.2.5
--e git+https://github.com/kalarimonk/hls4tenet.git@692dd3eda787123e4eecb0d6b964afe5da92d5f6#egg=hls_tenet
 humanize==4.13.0
 importlib_metadata==8.7.1
 importlib_resources==6.5.2
