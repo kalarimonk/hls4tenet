@@ -1,0 +1,13 @@
+#ifndef TENSORS_H
+#define TENSORS_H
+
+#include "./hls_tensor.h"
+
+__TENSOR_STR_START__
+const tensor_t site__TENSOR_ID__[left_dim][right_dim][phy_dim] = __tensor_values__;
+__TENSOR_STR_END__
+
+__LABEL_TENSOR_STR_START__
+const tensor_t label_site[left_dim][right_dim][phy_dim][label_dim] = __label_values__;
+__LABEL_TENSOR_STR_END__
+#endif

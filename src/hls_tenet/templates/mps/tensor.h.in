@@ -1,0 +1,20 @@
+#ifndef HLS_TENSOR_H
+#define HLS_TENSOR_H
+
+#include <ap_fixed.h>
+
+#define NUM_FEATURES __FEATURES__
+#define NUM_NODES __NUM_NODES__
+
+#define PHY_BOND_DIM __PHY_BOND_DIM__ // Will be same for all tensors as the all input feature vector must be of the same length
+#define MAX_BOND_DIM __MAX_BOND_DIM__ // This is the maximum bond dimension across all tensors in the MPS
+#define LABEL_DIM __LABEL_DIM__
+
+#define LABEL_SITE_INDEX __LABEL_SITE_ID__
+
+#define BITS_PACKED __BITS_PACKED__ // 216
+
+typedef ap_fixed<18, 8> tensor_t;
+// typedef unsigned long size_t;
+
+#endif
