@@ -1,11 +1,9 @@
 import re
-import struct
 from pathlib import Path
-import os
-import tn4ml 
-from tn4ml.models.model import *
 
 import numpy as np
+
+from hls_tenet.tool_configuration import ToolConfiguration
 
 NODE_KEY_PATTERN = re.compile(r"^\d+\.\d+$")
 
@@ -34,12 +32,15 @@ def process_directory(input_dir: Path, output_dir: Path) -> None:
             save_npy_as_dat(npy_file, txt_file)
 
 class TTNProcessor:
-    def __init__(self, model_path: Path):
-        self.model_path = Path(model_path)
+    def __init__(self, configuration: ToolConfiguration):
+        self.model_path = Path(configuration.model_files_path)
         self.is_top_iso = False
         self.input_map_dim = 2
         self.reset_state()
         self.parse_software_model(self.model_path)
+        # self.bits_to_pack = self.calculate_bits_to_pack(configuration.word_depth)
+        self.word_depth = configuration.word_depth
+        self.int_bits = configuration.int_bits
 
     def reset_state(self) -> None:
         self.num_nodes = 0
@@ -149,13 +150,20 @@ class TTNProcessor:
     def get_dispatch_config(self):
         return self.dispatch_config
 
+    def calculate_bits_to_pack(self, bit_width: int) -> int:
+        self.bits_to_pack = self.input_map_dim * self.num_features * bit_width
+        return self.bits_to_pack
+
 
 
 class MPSProcessor:
-    def __init__(self, model_path: Path):
-        self.model_path = Path(model_path)
+    def __init__(self, configuration: ToolConfiguration):
+        self.model_path = Path(configuration.model_files_path)
         self.reset_state()
         self.parse_software_model(self.model_path)
+        # self.bits_to_pack = self.calculate_bits_to_pack(configuration.word_depth)
+        self.word_depth = configuration.word_depth
+        self.int_bits = configuration.int_bits
 
     def reset_state(self) -> None:
         self.num_nodes = 0
@@ -172,6 +180,8 @@ class MPSProcessor:
         self.reset_state()
         
         print(f"Parsing software MPS model: {model_path.parent / model_path.stem}")
+        # Why here?
+        from tn4ml.models.model import load_model
 
         model = load_model(f"{model_path.parent / model_path.stem}")
         
@@ -196,7 +206,6 @@ class MPSProcessor:
             tensor_id += 1
         self.phy_bond_dim = c # The physical bond dimension is the last one in the shape of the tensors [bond_left, bond_right, phy_bond_dim]
     
-    def calculate_bits_to_pack(self, bit_width: int) -> int:
-        self.bits_to_pack = self.phy_bond_dim * self.num_features * bit_width
+    def calculate_bits_to_pack(self) -> int:
+        self.bits_to_pack = self.phy_bond_dim * self.num_features * self.word_depth
         return self.bits_to_pack
-        

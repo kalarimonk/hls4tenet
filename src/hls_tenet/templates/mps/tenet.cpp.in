@@ -71,7 +71,7 @@ void run_tenet( hls::stream<ap_uint<BITS_PACKED>>& features, hls::stream<tensor_
 		__START_CALL_LEFT_ENV_KERNELS__
 		//Left Environment Contractions
 		lenv_rank3_tensor_contraction<__LEFT_DIM__,__RIGHT_DIM__,__PHY_DIM__>(l_env, in_data[__ID__], site__ID__, l_next);			
-		update_lenv: for(int i=0; i< __RIGHT_DIM__ ;i++){
+		update_lenv__ID__: for(int i=0; i< __RIGHT_DIM__ ;i++){
 			l_env[i] = l_next[i];
 		}
 		__CALL_LEFT_ENV_KERNELS_END__
@@ -82,7 +82,7 @@ void run_tenet( hls::stream<ap_uint<BITS_PACKED>>& features, hls::stream<tensor_
 		__RIGHTMOST_KERNELS_END__
 		__START_CALL_RIGHT_ENV_KERNELS__
 		renv_rank3_tensor_contraction<__LEFT_DIM__,__RIGHT_DIM__,__PHY_DIM__>(r_env, in_data[__ID__], site__ID__, r_next);			
-		update_renv: for(int i=0; i< __LEFT_DIM__ ;i++){
+		update_renv__ID__: for(int i=0; i< __LEFT_DIM__ ;i++){
 			r_env[i] = r_next[i];
 		}
 		__CALL_RIGHT_ENV_KERNELS_END__

@@ -17,7 +17,7 @@
 
 #define BITS_PACKED __BITS_PACKED__
 
-typedef ap_fixed<16,2> tensor_t;
+typedef ap_fixed<__WORD_DEPTH__, __INT_BITS__> tensor_t;
 // typedef unsigned long size_t;
 
 /*
@@ -27,7 +27,8 @@ typedef ap_fixed<16,2> tensor_t;
  * dim3: Top Link Dimension (Internal Bond Dimension)
  * start_idx: Index to access the current weight tensor from the flattened 1D Weights Array
  */
-struct Tensor3D{
+struct Tensor3D
+{
     int dim1;
     int dim2;
     int dim3;
