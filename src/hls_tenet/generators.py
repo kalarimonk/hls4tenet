@@ -57,8 +57,8 @@ def generate_macro_header(template_path: Path, output_path: Path, processor) -> 
     input_spinorial_mapping = processor.get_input_map_dim()
     last_layer_count = int(np.power(2, processor.get_tree_height() - 1))
 
-    bit_width = 16
-    bit_to_pack = processor.get_input_map_dim() * processor.get_num_features() * bit_width
+    # bit_width = 16
+    # bit_to_pack = processor.get_input_map_dim() * processor.get_num_features() * bit_width
 
     replacements = {
         "__FEATURES__": f"{processor.get_num_features()}",
@@ -69,7 +69,9 @@ def generate_macro_header(template_path: Path, output_path: Path, processor) -> 
         "__CLASSES__": f"{processor.get_num_classes()}",
         "__HEIGHT__": f"{processor.get_tree_height()}",
         "__LAST_LAYER_COUNT__": f"{last_layer_count}",
-        "__BITS_PACKED__": f"{bit_to_pack}",
+        "__BITS_PACKED__": f"{processor.calculate_bits_to_pack()}",
+        "__WORD_DEPTH__": f"{processor.word_depth}",
+        "__INT_BITS__": f"{processor.int_bits}",
     }
     generate_header(template_path, output_path, replacements)
 

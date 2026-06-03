@@ -6,6 +6,7 @@ import sys
 from importlib.resources import files
 from pathlib import Path
 from typing import Optional
+from time import sleep
 
 from hls_tenet.mps_generators import generate_mpsmacro_header, generate_mpsweight_file, generate_top_module
 
@@ -26,6 +27,9 @@ def tenet_args(argv=None):
     parser.add_argument("model_path", type=Path, help="Path to model file (e.g. .pkl, .npz)")
     # parser.add_argument("directory_path",type=Path, help="Path to data directory")
     parser.add_argument("tn",choices=["mps","ttn"], help="Tensor Network Structure")
+    
+    parser.add_argument("-w", type=int, default=16, help="Number of integer bits for ap_fixed type")
+    parser.add_argument("-i", type=int, default=2, help="Number of fractional bits for ap_fixed type")
     
     parser.add_argument("-c", "--csim", action="store_true", help="Run C-Simulation ")
     parser.add_argument("-tb","--tb_data", type=Path, help="Path to testbench data file for C-sim (e.g. test.bin)")
@@ -50,7 +54,7 @@ def run_generation(configuration: ToolConfiguration) -> TTNProcessor or MPSProce
     # process_directory(configuration.dataset_directory, tb_data_dir) 
     
     if configuration.tensor_network_structure == "TTN":
-        processor = TTNProcessor(configuration.model_files_path)
+        processor = TTNProcessor(configuration)
         
         print(f"Total number of nodes in the tree: {processor.get_num_node()}")
         print(f"Max bond dimensions: {processor.get_max_bond_dimension()}")
@@ -75,7 +79,7 @@ def run_generation(configuration: ToolConfiguration) -> TTNProcessor or MPSProce
         
     
     if configuration.tensor_network_structure == "MPS":
-        processor = MPSProcessor(configuration.model_files_path)
+        processor = MPSProcessor(configuration)
         
         print(f"\nTotal number of nodes in the network: {processor.num_features}")
         print(f"\nMax bond dimension: {processor.max_bond_dim}")
@@ -141,6 +145,8 @@ def main(argv=None):
     configuration.model_files_path = args.model_path.resolve()
     configuration.output_dir = Path(os.getcwd()+os.sep+"generated_hls")
     
+    configuration.word_depth = args.w
+    configuration.int_bits = args.i
     
     # Remove the directory and its contents if it exists
     if configuration.output_dir.exists() and configuration.output_dir.is_dir():
@@ -171,6 +177,7 @@ def main(argv=None):
     configuration.vitis_configfile_path = configuration.output_dir.joinpath("hls_config.cfg")
 
     configuration.display_configuration()
+    sleep(2)  # Small delay to allow user to read configuration summary before generation starts
     
     print("\n\n--------------------Initializing TENET--------------------")
     

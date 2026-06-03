@@ -68,6 +68,8 @@ def run_vitis_operation(args) -> None:
         print("Disposing Vitis")
         vitis.dispose()
 
+    if args.pack:
+        print("\n\n[TENET-INFO]: IP package created successfully. You can find run_tenet.zip in the Vitis workspace under tenet_workspace/tenet_comp/tenet_comp/")
 
 def main(argv=None):
     args = vitis_args(argv)

@@ -14,7 +14,7 @@
 
 #define BITS_PACKED __BITS_PACKED__ // 216
 
-typedef ap_fixed<18, 8> tensor_t;
+typedef ap_fixed<__WORD_DEPTH__, __INT_BITS__> tensor_t;
 // typedef unsigned long size_t;
 
 #endif

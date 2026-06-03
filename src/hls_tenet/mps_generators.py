@@ -11,82 +11,125 @@ def generate_top_module(template_path: Path, output_path: Path, processor) -> No
     content = template_path.read_text(encoding="utf-8")
     str_literal_prefix = ""
     str_literal_suffix = ""
+    leftmost_template = None
+    left_env_template = None
+    leftmost_kernels = []
+    left_env_kernels = []
+
     for i in range(processor.num_nodes):
         if i == 0 and i != processor.label_site_id:
-            str_literal_prefix = "__START_LEFTMOST_KERNELS__"
-            str_literal_suffix = "__LEFTMOST_KERNELS_END__"
-            matched_str = re.search(f"{str_literal_prefix}(.*?){str_literal_suffix}", content, re.DOTALL)
-            if not matched_str:
-                raise ValueError("Process failed: template string markers not found")
+            if leftmost_template is None:
+                leftmost_prefix = "__START_LEFTMOST_KERNELS__"
+                leftmost_suffix = "__LEFTMOST_KERNELS_END__"
+                matched_str = re.search(
+                    f"{leftmost_prefix}(.*?){leftmost_suffix}", content, re.DOTALL
+                )
+                if not matched_str:
+                    raise ValueError("Process failed: template string markers not found")
 
-            template_str = matched_str.group(1)
+                leftmost_template = matched_str.group(1)
+
             a, b, c = processor.tensor_metadata[i]
-            # print("Generating kernel calls for leftmost kernel")
+            temp_str = leftmost_template
+            temp_str = temp_str.replace("__LEFT_DIM__", str(a))
+            temp_str = temp_str.replace("__RIGHT_DIM__", str(b))
+            temp_str = temp_str.replace("__PHY_DIM__", str(c))
+            temp_str = temp_str.replace("__ID__", str(i))
+            leftmost_kernels.append(temp_str)
         elif i < processor.label_site_id:
-            str_literal_prefix = "__START_CALL_LEFT_ENV_KERNELS__"
-            str_literal_suffix = "__CALL_LEFT_ENV_KERNELS_END__"
-            matched_str = re.search(f"{str_literal_prefix}(.*?){str_literal_suffix}", content, re.DOTALL)
-            if not matched_str:
-                raise ValueError("Process failed: template string markers not found")
+            if left_env_template is None:
+                left_env_prefix = "__START_CALL_LEFT_ENV_KERNELS__"
+                left_env_suffix = "__CALL_LEFT_ENV_KERNELS_END__"
+                matched_str = re.search(
+                    f"{left_env_prefix}(.*?){left_env_suffix}", content, re.DOTALL
+                )
+                if not matched_str:
+                    raise ValueError("Process failed: template string markers not found")
 
-            template_str = matched_str.group(1)
+                left_env_template = matched_str.group(1)
+
             a, b, c = processor.tensor_metadata[i]
-            # print(f"Generating kernel calls for left kernel {i}")
-            
-        new_content_parts = []   
-        temp_str = template_str
-        temp_str = temp_str.replace("__LEFT_DIM__", str(a))
-        temp_str = temp_str.replace("__RIGHT_DIM__", str(b))
-        temp_str = temp_str.replace("__PHY_DIM__", str(c))
-        temp_str = temp_str.replace("__ID__", str(i))
-        new_content_parts.append(temp_str)
-        
-        new_content = "".join(new_content_parts)
+            temp_str = left_env_template
+            temp_str = temp_str.replace("__LEFT_DIM__", str(a))
+            temp_str = temp_str.replace("__RIGHT_DIM__", str(b))
+            temp_str = temp_str.replace("__PHY_DIM__", str(c))
+            temp_str = temp_str.replace("__ID__", str(i))
+            left_env_kernels.append(temp_str)
+
+    if leftmost_kernels:
         content = re.sub(
-            rf"{str_literal_prefix}(.*?){str_literal_suffix}",
-            str(new_content),
+            rf"{leftmost_prefix}(.*?){leftmost_suffix}",
+            "".join(leftmost_kernels),
             content,
             flags=re.DOTALL,
         )
-            
-    
-    
-    for i in range(processor.num_nodes-1,0, -1):   
+
+    if left_env_kernels:
+        content = re.sub(
+            rf"{left_env_prefix}(.*?){left_env_suffix}",
+            "".join(left_env_kernels),
+            content,
+            flags=re.DOTALL,
+        )
+
+    rightmost_template = None
+    right_env_template = None
+    rightmost_kernels = []
+    right_env_kernels = []
+
+    for i in range(processor.num_nodes-1, 0, -1):   
         # print(f"\nProcessing node {i} for right environment kernels")
         if i == processor.num_nodes - 1 and i != processor.label_site_id:
-            str_literal_prefix = "__START_RIGHTMOST_KERNELS__"
-            str_literal_suffix = "__RIGHTMOST_KERNELS_END__"
-            matched_str = re.search(f"{str_literal_prefix}(.*?){str_literal_suffix}", content, re.DOTALL)
-            if not matched_str:
-                raise ValueError("Process failed: template string markers not found")
+            if rightmost_template is None:
+                rightmost_prefix = "__START_RIGHTMOST_KERNELS__"
+                rightmost_suffix = "__RIGHTMOST_KERNELS_END__"
+                matched_str = re.search(
+                    f"{rightmost_prefix}(.*?){rightmost_suffix}", content, re.DOTALL
+                )
+                if not matched_str:
+                    raise ValueError("Process failed: template string markers not found")
 
-            template_str = matched_str.group(1)
+                rightmost_template = matched_str.group(1)
+
             a, b, c = processor.tensor_metadata[i]
-            # print(f"Generating kernel calls for rightmost kernel")
-            
+            temp_str = rightmost_template
+            temp_str = temp_str.replace("__LEFT_DIM__", str(a))
+            temp_str = temp_str.replace("__RIGHT_DIM__", str(b))
+            temp_str = temp_str.replace("__PHY_DIM__", str(c))
+            temp_str = temp_str.replace("__ID__", str(i))
+            rightmost_kernels.append(temp_str)
         elif i > processor.label_site_id:
-            str_literal_prefix = "__START_CALL_RIGHT_ENV_KERNELS__"
-            str_literal_suffix = "__CALL_RIGHT_ENV_KERNELS_END__"
-            matched_str = re.search(f"{str_literal_prefix}(.*?){str_literal_suffix}", content, re.DOTALL)
-            if not matched_str:
-                raise ValueError("Process failed: template string markers not found")
+            if right_env_template is None:
+                right_env_prefix = "__START_CALL_RIGHT_ENV_KERNELS__"
+                right_env_suffix = "__CALL_RIGHT_ENV_KERNELS_END__"
+                matched_str = re.search(
+                    f"{right_env_prefix}(.*?){right_env_suffix}", content, re.DOTALL
+                )
+                if not matched_str:
+                    raise ValueError("Process failed: template string markers not found")
 
-            template_str = matched_str.group(1)
+                right_env_template = matched_str.group(1)
+
             a, b, c = processor.tensor_metadata[i]
-            # print(f"Generating kernel calls for right kernel {i}")
-        
-        new_content_parts = []
-        temp_str = template_str
-        temp_str = temp_str.replace("__LEFT_DIM__", str(a))
-        temp_str = temp_str.replace("__RIGHT_DIM__", str(b))
-        temp_str = temp_str.replace("__PHY_DIM__", str(c))
-        temp_str = temp_str.replace("__ID__", str(i))
-        new_content_parts.append(temp_str)
+            temp_str = right_env_template
+            temp_str = temp_str.replace("__LEFT_DIM__", str(a))
+            temp_str = temp_str.replace("__RIGHT_DIM__", str(b))
+            temp_str = temp_str.replace("__PHY_DIM__", str(c))
+            temp_str = temp_str.replace("__ID__", str(i))
+            right_env_kernels.append(temp_str)
 
-        new_content = "".join(new_content_parts)
+    if rightmost_kernels:
         content = re.sub(
-            rf"{str_literal_prefix}(.*?){str_literal_suffix}",
-            str(new_content),
+            rf"{rightmost_prefix}(.*?){rightmost_suffix}",
+            "".join(rightmost_kernels),
+            content,
+            flags=re.DOTALL,
+        )
+
+    if right_env_kernels:
+        content = re.sub(
+            rf"{right_env_prefix}(.*?){right_env_suffix}",
+            "".join(right_env_kernels),
             content,
             flags=re.DOTALL,
         )
@@ -132,8 +175,6 @@ def generate_top_module(template_path: Path, output_path: Path, processor) -> No
 def generate_mpsmacro_header(template_path: Path, output_path: Path, processor: MPSProcessor) -> None:
     print("Generating tensor macros")
 
-    bit_width = 18
-
     replacements = {
         "__FEATURES__": f"{processor.num_features}",
         "__NUM_NODES__": f"{processor.num_nodes}",
@@ -141,7 +182,9 @@ def generate_mpsmacro_header(template_path: Path, output_path: Path, processor: 
         "__MAX_BOND_DIM__": f"{processor.max_bond_dim}",
         "__LABEL_DIM__": f"{processor.classes}",
         "__LABEL_SITE_ID__": f"{processor.label_site_id}",
-        "__BITS_PACKED__": f"{processor.calculate_bits_to_pack(bit_width)}",
+        "__BITS_PACKED__": f"{processor.calculate_bits_to_pack()}",
+        "__WORD_DEPTH__": f"{processor.word_depth}",
+        "__INT_BITS__": f"{processor.int_bits}",
     }
     generate_header(template_path, output_path, replacements)
 
