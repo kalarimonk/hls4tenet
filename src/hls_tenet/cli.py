@@ -31,6 +31,8 @@ def tenet_args(argv=None):
     parser.add_argument("-w", type=int, default=16, help="Number of integer bits for ap_fixed type")
     parser.add_argument("-i", type=int, default=2, help="Number of fractional bits for ap_fixed type")
     
+    parser.add_argument("-clock", type=float, default=4.0, help="Clock period for Vitis HLS synthesis (e.g. 5 for 5ns)")
+    
     parser.add_argument("-c", "--csim", action="store_true", help="Run C-Simulation ")
     parser.add_argument("-tb","--tb_data", type=Path, help="Path to testbench data file for C-sim (e.g. test.bin)")
     
@@ -68,8 +70,9 @@ def run_generation(configuration: ToolConfiguration) -> TTNProcessor or MPSProce
         generate_tensor_data(templates_dir / "weights.h.in", configuration.output_dir / "hls_weights.h", processor)
         generate_dispatcher(templates_dir / "dispatcher.cpp.in", configuration.output_dir / "hls_dispatcher.cpp", processor)
 
-        generate_config(templates_dir/ "config.cfg.in", configuration.vitis_configfile_path, configuration.tb_data_path)
-
+        # generate_config(templates_dir/ "config.cfg.in", configuration.vitis_configfile_path, configuration.tb_data_path)
+        generate_config(templates_dir/ "config.cfg.in", configuration)
+        
         generate_immutables(templates_dir/ "tenet.h.in", configuration.output_dir/"hls_tenet.h", processor)
         generate_immutables(templates_dir/ "tenet.cpp.in", configuration.output_dir/"hls_tenet.cpp", processor)
         generate_immutables(templates_dir/ "dispatcher.h.in", configuration.output_dir/"hls_dispatcher.h", processor)
@@ -90,7 +93,7 @@ def run_generation(configuration: ToolConfiguration) -> TTNProcessor or MPSProce
         generate_mpsmacro_header(templates_dir / "tensor.h.in", configuration.output_dir.joinpath("hls_tensor.h"), processor)
         generate_mpsweight_file(templates_dir / "weights.h.in", configuration.output_dir / "hls_weights.h", processor)
         generate_top_module(templates_dir / "tenet.cpp.in", configuration.output_dir / "hls_tenet.cpp", processor)
-        generate_config(templates_dir/ "config.cfg.in", configuration.vitis_configfile_path, configuration.tb_data_path)
+        generate_config(templates_dir/ "config.cfg.in", configuration)
 
         generate_immutables(templates_dir/ "tenet.h.in", configuration.output_dir/"hls_tenet.h", processor)
         generate_immutables(templates_dir/ "contraction.h.in", configuration.output_dir/"hls_contraction.h", processor)
@@ -147,6 +150,7 @@ def main(argv=None):
     
     configuration.word_depth = args.w
     configuration.int_bits = args.i
+    configuration.clock_period = args.clock
     
     # Remove the directory and its contents if it exists
     if configuration.output_dir.exists() and configuration.output_dir.is_dir():
