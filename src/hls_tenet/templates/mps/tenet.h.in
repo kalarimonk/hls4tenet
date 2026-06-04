@@ -7,7 +7,7 @@
 #include <hls_math.h>
 #include <hls_stream.h>
 
-#define PRECISION 18
+// #define PRECISION 32
 
 void run_tenet(hls::stream<ap_uint<BITS_PACKED>> &features, hls::stream<tensor_t> predictions[LABEL_DIM]);
 

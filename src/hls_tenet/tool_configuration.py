@@ -17,12 +17,14 @@ class ToolConfiguration:
         self.generate_vitis_configfile: bool = False
         self.word_depth: int = 16
         self.int_bits: int = 2
+        self.clock_period: float = 4.0
     
     def display_configuration(self):
         print("\nTENET Configuration Summary:")
         print(f"  - Tensor Network Structure: {self.tensor_network_structure}")
         print(f"  - Word Depth: {self.word_depth}")
         print(f"  - Integer Bits: {self.int_bits}")
+        print(f"  - Clock Period: {self.clock_period} ns")
         print(f"  - Model Files Path: {self.model_files_path}")
         print(f"  - Dataset Directory: {self.dataset_directory}")
         print(f"  - Output Directory: {self.output_dir}")

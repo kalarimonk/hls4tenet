@@ -11,7 +11,7 @@
 #define LABEL_DIM __LABEL_DIM__
 
 #define LABEL_SITE_INDEX __LABEL_SITE_ID__
-
+#define PRECISION __WORD_DEPTH__
 #define BITS_PACKED __BITS_PACKED__ // 216
 
 typedef ap_fixed<__WORD_DEPTH__, __INT_BITS__> tensor_t;

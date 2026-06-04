@@ -12,7 +12,7 @@
 #include <inttypes.h>
 
 #define NUM_SAMPLES 1000
-#define PRECISION 18
+//#define PRECISION 32 // TODO:change this to import from tenet
 
 using namespace std;
 

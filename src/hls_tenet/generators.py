@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
-
 import numpy as np
+from hls_tenet.tool_configuration import ToolConfiguration
 
 
 def generate_dispatcher(template_path: Path, output_path: Path, processor) -> None:
@@ -43,12 +43,17 @@ def generate_header(template_path: Path, output_path: Path, replacements = None)
 
     output_path.write_text(content, encoding="utf-8")
 
-def generate_config(template_path: Path, output_path: Path, tb_data_path: Path) -> None:
+def generate_config(template_path: Path, configuration: ToolConfiguration) -> None:
     print("Generating config file")
+    
+    output_path = Path(configuration.vitis_configfile_path)
+    tb_data_path = Path(configuration.tb_data_path)
+    
     replacements = {
         "__OUTPUT_DIR__": output_path.parent.absolute(),
         "<tb_data_path>": tb_data_path.absolute(),
         "<result_file_path>": output_path.parent.absolute().joinpath("results.txt"),
+        "__CLOCK_PERIOD__": f"{configuration.clock_period}",
     }
     generate_header(template_path, output_path, replacements)
 
