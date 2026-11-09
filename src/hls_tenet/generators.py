@@ -49,6 +49,9 @@ def generate_config(template_path: Path, configuration: ToolConfiguration) -> No
     output_path = Path(configuration.vitis_configfile_path)
     tb_data_path = Path(configuration.tb_data_path)
     
+    word_width = configuration.word_depth
+    int_bits = configuration.int_bits
+    
     replacements = {
         "__OUTPUT_DIR__": output_path.parent.absolute(),
         "<tb_data_path>": tb_data_path.absolute(),

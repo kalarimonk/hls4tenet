@@ -62,11 +62,14 @@ int main(int argc, char *argv[])
             {
                 ifile.read(reinterpret_cast<char *>(&temp), sizeof(double));
                 tensor_t raw_bits = tensor_t(temp);
+                //cout << "\nRaw bits:" << raw_bits.range(PRECISION - 1, 0) << "\t Corr Val:" << temp << endl;
+
                 packed.range(index + PRECISION - 1, index) = raw_bits.range(PRECISION - 1, 0);
                 index += PRECISION;
             }
         }
         //cout << "\n\nSample:" << n << endl;
+        //cout << "\nPacked Vaue " << packed << endl;
         sample_new.write(packed);
         run_tenet(sample_new, output);
 
@@ -75,7 +78,7 @@ int main(int argc, char *argv[])
             if (!output[k].empty())
             {
                 out[k] = output[k].read();
-                result_file << setprecision(PRECISION - 8) << out[k] << endl;
+                result_file << setprecision(PRECISION - INT_BITS) << out[k] << endl;
                 //cout << "out" << k << ":" << out[k]  << setprecision(PRECISION - 8) << endl;
             }
         }
