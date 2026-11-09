@@ -11,8 +11,8 @@
 #include <math.h>
 #include <inttypes.h>
 
-#define NUM_SAMPLES 80
-#define PRECISION 16
+#define NUM_SAMPLES 800
+// #define PRECISION 16
 
 using namespace std;
 
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
             if (!output[k].empty())
             {
                 out[k] = output[k].read();
-                result_file << setprecision(PRECISION - 2) << out[k] << endl;
+                result_file << setprecision(PRECISION - INT_BITS) << out[k] << endl;
             }
         }
     }

@@ -113,7 +113,8 @@ class TTNProcessor:
                 norm = np.linalg.norm(flat_weights)
                 if norm != 0:
                     flat_weights = flat_weights / norm
-
+            
+            print("\nFlat weights for tensor", key, flat_weights)
             # fp.write(flat_weights.astype(np.float64))
             self.tensor_values.extend(flat_weights.tolist())
 
@@ -150,8 +151,8 @@ class TTNProcessor:
     def get_dispatch_config(self):
         return self.dispatch_config
 
-    def calculate_bits_to_pack(self, bit_width: int) -> int:
-        self.bits_to_pack = self.input_map_dim * self.num_features * bit_width
+    def calculate_bits_to_pack(self) -> int:
+        self.bits_to_pack = self.input_map_dim * self.num_features * self.word_depth
         return self.bits_to_pack
 
 
@@ -184,7 +185,7 @@ class MPSProcessor:
         from tn4ml.models.model import load_model
 
         model = load_model(f"{model_path.parent / model_path.stem}")
-        
+        print(type(model))
         self.num_nodes = model.L
         self.num_features = model.L
         self.max_bond_dim = model.max_bond()

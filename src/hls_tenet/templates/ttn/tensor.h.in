@@ -17,8 +17,9 @@
 
 #define BITS_PACKED __BITS_PACKED__
 #define PRECISION __WORD_DEPTH__
+#define INT_BITS __INT_BITS__
 
-typedef ap_fixed<__WORD_DEPTH__, __INT_BITS__> tensor_t;
+typedef ap_fixed<__WORD_DEPTH__, __INT_BITS__, AP_RND, AP_SAT> tensor_t;
 // typedef unsigned long size_t;
 
 /*
