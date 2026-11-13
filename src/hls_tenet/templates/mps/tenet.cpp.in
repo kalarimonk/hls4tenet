@@ -17,7 +17,7 @@ void run_tenet( hls::stream<ap_uint<BITS_PACKED>>& features, hls::stream<tensor_
 
 #pragma HLS INTERFACE mode=ap_ctrl_none port=return
 
-#pragma HLS PIPELINE II=4
+#pragma HLS PIPELINE II=1
 
 #pragma HLS ARRAY_PARTITION variable=predictions complete dim=0
 
