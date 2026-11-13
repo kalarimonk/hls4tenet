@@ -15,11 +15,10 @@
 /generated_hls
 /hls
 /export
-/datasets/
 /run_tenet
 /testbench_data
 /.cache/
-/utilities/__pycache__/
+/utilities
 .pytest_cache/
 .ruff_cache/
 /.ipynb_checkpoints/
