@@ -18,7 +18,7 @@ void left_boundary_contraction(tensor_t *data, const tensor_t (&site)[left_dim][
 		{
 			for (int k = 0; k < phy_dim; k++)
 			{
-				accum[i] += data[i] * site[j][i][k];
+				accum[i] += data[k] * site[j][i][k];
 			}
 		}
 	}
@@ -44,7 +44,7 @@ void right_boundary_contraction(tensor_t *data, const tensor_t (&site)[left_dim]
 		{
 			for (int k = 0; k < phy_dim; k++)
 			{
-				accum[i] += data[i] * site[i][j][k];
+				accum[i] += data[k] * site[i][j][k];
 			}
 		}
 	}
@@ -118,6 +118,49 @@ void rank4_tensor_contraction(tensor_t *l_data, tensor_t *r_data, tensor_t *data
 
 	tensor_t accum[label_dim];
 
+	// Done in two steps:
+	//   Step 1: contract the label site with its own input feature  -> label_data
+	//   Step 2: multiply label_data with the left and right environments -> accum
+	//
+	// Why this order:
+	//   - Fewer DSPs: l_data[j] * r_data[k] is the same for every label i, so it is
+	//     computed once and reused for all outputs.
+	//   - No overflow: we never form l_data * r_data * data, which grew too large
+	//     for ap_fixed<18,8> and saturated in the original order.
+	tensor_t label_data[left_dim][right_dim][label_dim];
+#pragma HLS ARRAY_PARTITION variable = label_data complete dim = 0
+
+	for (int j = 0; j < left_dim; j++)
+	{
+		for (int k = 0; k < right_dim; k++)
+		{
+			for (int i = 0; i < label_dim; i++)
+			{
+				tensor_t label_accum = 0;
+				for (int l = 0; l < phy_dim; l++)
+				{
+					label_accum += data[l] * site[j][k][l][i];
+				}
+				label_data[j][k][i] = label_accum;
+			}
+		}
+	}
+
+	for (int i = 0; i < label_dim; i++)
+	{
+		accum[i] = 0;
+		for (int j = 0; j < left_dim; j++)
+		{
+			for (int k = 0; k < right_dim; k++)
+			{
+				tensor_t prod1 = l_data[j] * r_data[k];
+				accum[i] += prod1 * label_data[j][k][i];
+			}
+		}
+	}
+
+	/* Previous (reordered) version: (l*r)*site, then *data. No saturation at 18,8,
+	   but prod2 depends on i so nothing is shared across label outputs (~440 var*var DSPs).
 	for (int i = 0; i < label_dim; i++)
 	{
 		accum[i] = 0;
@@ -128,13 +171,18 @@ void rank4_tensor_contraction(tensor_t *l_data, tensor_t *r_data, tensor_t *data
 				for (int l = 0; l < phy_dim; l++)
 				{
 					// std::cout<< weight_idx << std::endl;
+					// tensor_t prod1 = l_data[j] * r_data[k];
+					// tensor_t prod2 = prod1 * data[l];
+					// accum[i] += prod2 * site[j][k][l][i];
+
 					tensor_t prod1 = l_data[j] * r_data[k];
-					tensor_t prod2 = prod1 * data[l];
-					accum[i] += prod2 * site[j][k][l][i];
+					tensor_t prod2 = prod1 * site[j][k][l][i];
+					accum[i] += prod2 * data[l];
 				}
 			}
 		}
 	}
+	*/
 
 	for (int i = 0; i < label_dim; i++)
 	{

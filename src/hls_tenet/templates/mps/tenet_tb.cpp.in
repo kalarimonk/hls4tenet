@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
             if (!output[k].empty())
             {
                 out[k] = output[k].read();
-                result_file << setprecision(PRECISION - INT_BITS) << out[k] << endl;
+                result_file << std::fixed << setprecision(PRECISION - INT_BITS) << out[k] << endl;
                 //cout << "out" << k << ":" << out[k]  << setprecision(PRECISION - 8) << endl;
             }
         }
