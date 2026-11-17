@@ -5,13 +5,12 @@ import subprocess
 import sys
 from importlib.resources import files
 from pathlib import Path
-from typing import Optional
 from time import sleep
 
 from hls_tenet.mps_generators import generate_mpsmacro_header, generate_mpsweight_file, generate_top_module
 
 from .generators import generate_config, generate_dispatcher, generate_macro_header, generate_tensor_data, generate_immutables
-from .processor import MPSProcessor, TTNProcessor, process_directory
+from .processor import MPSProcessor, TTNProcessor
 from .tool_configuration import ToolConfiguration
   
     
@@ -28,8 +27,8 @@ def tenet_args(argv=None):
     # parser.add_argument("directory_path",type=Path, help="Path to data directory")
     parser.add_argument("tn",choices=["mps","ttn"], help="Tensor Network Structure")
     
-    parser.add_argument("-w", type=int, default=16, help="Number of integer bits for ap_fixed type")
-    parser.add_argument("-i", type=int, default=2, help="Number of fractional bits for ap_fixed type")
+    parser.add_argument("-w", type=int, default=16, help="Total bit width W of the ap_fixed<W, I> type")
+    parser.add_argument("-i", type=int, default=2, help="Integer bits I of the ap_fixed<W, I> type")
     
     parser.add_argument("-clock", type=float, default=4.0, help="Clock period for Vitis HLS synthesis (e.g. 5 for 5ns)")
     
@@ -151,20 +150,14 @@ def main(argv=None):
     configuration.word_depth = args.w
     configuration.int_bits = args.i
     configuration.clock_period = args.clock
-    
-    # Remove the directory and its contents if it exists
-    if configuration.output_dir.exists() and configuration.output_dir.is_dir():
-        shutil.rmtree(configuration.output_dir)  # Deletes the directory recursively.  Clean slate for generation.
-    
-    configuration.output_dir.mkdir(parents=True, exist_ok=True)
     # configuration.dataset_directory = dataset_dir
-    
+
     if args.csim and not args.tb_data:
-        print(f"Testbench data file is required for C-Simulation. eg: --tb_data x_test.bin")
+        print("Testbench data file is required for C-Simulation. eg: --tb_data x_test.bin")
         return 1
     
     if args.tb_data and not args.csim :
-        print(f"Testbench data file is only relevant if C-Simulation is enabled. Please provide --csim flag to enable C-Simulation.")
+        print("Testbench data file is only relevant if C-Simulation is enabled. Please provide --csim flag to enable C-Simulation.")
         return 1
     
     print("Testbench data file provided:", args.tb_data)
@@ -174,7 +167,13 @@ def main(argv=None):
             print(f"Unsupported testbench data file type: {args.tb_data.suffix}. Supported types are .bin")
             return 1
         configuration.tb_data_path = args.tb_data.resolve()
-        
+
+    # All arguments are valid: only now clear the previous output, so a mistyped command
+    # does not destroy an existing generated_hls/ folder.
+    if configuration.output_dir.exists() and configuration.output_dir.is_dir():
+        shutil.rmtree(configuration.output_dir)  # Clean slate for generation.
+    configuration.output_dir.mkdir(parents=True, exist_ok=True)
+
     configuration.run_vitis_csim = args.csim
     configuration.run_vitis_build = args.build
     configuration.run_vitis_pack = args.pack

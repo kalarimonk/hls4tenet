@@ -1,4 +1,4 @@
-"""TENET CLI package."""
+"""HLS4TENET CLI package."""
 
 from .cli import main
 

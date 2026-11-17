@@ -1,7 +1,6 @@
 import re
 from pathlib import Path
 
-import numpy as np
 
 from hls_tenet.generators import generate_header
 from hls_tenet.processor import MPSProcessor
@@ -139,7 +138,8 @@ def generate_top_module(template_path: Path, output_path: Path, processor) -> No
     str_literal_prefix = "__LABEL_KERNEL_START__"
     str_literal_suffix = "__LABEL_KERNEL_END__"
     matched_str = re.search(f"{str_literal_prefix}(.*?){str_literal_suffix}", content, re.DOTALL)
-    if not matched_str:        raise ValueError("Process failed: template string markers not found")
+    if not matched_str:
+        raise ValueError("Process failed: template string markers not found")
     template_str = matched_str.group(1)
     # print(f"Generating kernel call for label site kernel")
     
@@ -159,15 +159,15 @@ def generate_top_module(template_path: Path, output_path: Path, processor) -> No
     # If any template markers are left unmatched, 
     # it could mean that the mps structure does not require those kernels (ex: no left environment kernels if label site is at the leftmost position). 
     # In that case, we should remove the template markers and the content in between to avoid leaving template artifacts in the final generated code.
-    matched_str = re.search(f"__START(.*?)END__", content, re.DOTALL)
+    matched_str = re.search("__START(.*?)END__", content, re.DOTALL)
     while matched_str:
         content = re.sub(
-            f"__START(.*?)END__",
+            "__START(.*?)END__",
             "",
             content,
             flags=re.DOTALL,
         )
-        matched_str = re.search(f"__START(.*?)END__", content, re.DOTALL)
+        matched_str = re.search("__START(.*?)END__", content, re.DOTALL)
 
     output_path.write_text(content, encoding="utf-8")
 

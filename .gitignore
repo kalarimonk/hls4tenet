@@ -23,13 +23,13 @@
 .ruff_cache/
 /.ipynb_checkpoints/
 
-# Add later
-/.github/
-
 # Ignore object files and dependent files
 *.o
 *.d
 *.json
+*.v
+*.vhd
+*.sv
 dfx_runtime.txt
 
 
@@ -41,6 +41,8 @@ dfx_runtime.txt
 .lock
 
 *.bin
+# ...but keep the example testbench inputs, the README quick start needs them
+!examples/**/*.bin
 .pdi
 .peers.ini
 .repo.yaml

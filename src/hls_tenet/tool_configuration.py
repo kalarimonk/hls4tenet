@@ -30,13 +30,13 @@ class ToolConfiguration:
         print(f"  - Output Directory: {self.output_dir}")
         print(f"  - Testbench Data Path: {self.tb_data_path}")
         if self.run_vitis_csim or self.run_vitis_build or self.run_vitis_pack:
-            print(f"  - Run Vitis: Yes")
+            print("  - Run Vitis: Yes")
             print(f"    - Run C-Simulation: {'Yes' if self.run_vitis_csim else 'No'}")
             print(f"    - Run Synthesis Build: {'Yes' if self.run_vitis_build else 'No'}")
             print(f"    - Create RTL IP Package: {'Yes' if self.run_vitis_pack else 'No'}")
             print(f"    - Vitis Configuration File: {self.vitis_configfile_path if not self.generate_vitis_configfile else f'${self.vitis_configfile_path} (will be generated)'}")
         else :
-            print(f"  - Run Vitis: No Vitis tasks scheduled.")
+            print("  - Run Vitis: No Vitis tasks scheduled.")
 
         
         
