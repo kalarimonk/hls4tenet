@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 import numpy as np
-from hls_tenet.tool_configuration import ToolConfiguration
+from hls4tenet.tool_configuration import ToolConfiguration
 
 
 def generate_dispatcher(template_path: Path, output_path: Path, processor) -> None:

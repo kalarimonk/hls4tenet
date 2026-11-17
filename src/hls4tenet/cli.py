@@ -7,7 +7,7 @@ from importlib.resources import files
 from pathlib import Path
 from time import sleep
 
-from hls_tenet.mps_generators import generate_mpsmacro_header, generate_mpsweight_file, generate_top_module
+from hls4tenet.mps_generators import generate_mpsmacro_header, generate_mpsweight_file, generate_top_module
 
 from .generators import generate_config, generate_dispatcher, generate_macro_header, generate_tensor_data, generate_immutables
 from .processor import MPSProcessor, TTNProcessor
@@ -43,7 +43,7 @@ def tenet_args(argv=None):
 
 
 def _resolve_templates_dir(tn_model: str) -> Path:
-    resource_root = files("hls_tenet").joinpath("templates"+os.sep+tn_model.lower())
+    resource_root = files("hls4tenet").joinpath("templates"+os.sep+tn_model.lower())
     return Path(str(resource_root))
 
 

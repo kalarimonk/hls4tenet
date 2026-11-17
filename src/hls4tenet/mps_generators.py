@@ -2,8 +2,8 @@ import re
 from pathlib import Path
 
 
-from hls_tenet.generators import generate_header
-from hls_tenet.processor import MPSProcessor
+from hls4tenet.generators import generate_header
+from hls4tenet.processor import MPSProcessor
 
 
 def generate_top_module(template_path: Path, output_path: Path, processor) -> None:

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import numpy as np
 
-from hls_tenet.tool_configuration import ToolConfiguration
+from hls4tenet.tool_configuration import ToolConfiguration
 
 NODE_KEY_PATTERN = re.compile(r"^\d+\.\d+$")
 
@@ -192,15 +192,7 @@ class MPSProcessor:
             # max over the two virtual bonds (axes 0, 1); equals quimb's max_bond()
             self.max_bond_dim = max(max(t.shape[0], t.shape[1]) for t in tensors)
         else:
-            # Imported lazily so that .npz models work without tn4ml/jax installed.
-            try:
-                from tn4ml.models.model import load_model
-            except Exception as exc:  # ImportError, or jaxlib's AVX RuntimeError
-                raise RuntimeError(
-                    "Loading .pkl MPS models requires tn4ml (pip install 'tn4ml>=1.1.0') and a "
-                    "CPU supported by jax. Alternatively convert the model to .npz with "
-                    "hls_tenet.processor.export_mps_npz on a machine where tn4ml works."
-                ) from exc
+            load_model = _tn4ml_load_model()
             model = load_model(f"{model_path.parent / model_path.stem}")
             tensors = [t.data for t in model.tensors]
             self.max_bond_dim = model.max_bond()
@@ -222,10 +214,23 @@ class MPSProcessor:
         return self.bits_to_pack
 
 
+def _tn4ml_load_model():
+    """Return tn4ml's load_model. tn4ml is an optional dependency (the "tn4ml" extra), so it is
+    imported only when a .pkl model is actually used; .npz models work without it."""
+    try:
+        from tn4ml.models.model import load_model
+    except Exception as exc:  # ImportError, or jaxlib's AVX RuntimeError
+        raise RuntimeError(
+            "Loading .pkl MPS models requires tn4ml and a CPU supported by jax. Install it with "
+            "pip install \"hls4tenet[tn4ml]\", or convert the model to .npz with "
+            "hls4tenet.processor.export_mps_npz on a machine where tn4ml works."
+        ) from exc
+    return load_model
+
+
 def export_mps_npz(pkl_path: Path, npz_path: Path) -> None:
     """Convert a tn4ml MPS .pkl into the .npz format read by MPSProcessor (needs tn4ml)."""
-    from tn4ml.models.model import load_model
-
+    load_model = _tn4ml_load_model()
     pkl_path = Path(pkl_path)
     model = load_model(f"{pkl_path.parent / pkl_path.stem}")
     np.savez(npz_path, **{f"site{i}": np.asarray(t.data) for i, t in enumerate(model.tensors)})
