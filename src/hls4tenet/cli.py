@@ -17,7 +17,8 @@ from .tool_configuration import ToolConfiguration
 
 def tenet_args(argv=None):
     parser = argparse.ArgumentParser(
-        description="Process dataset/model files and generate HLS artifacts for TENET"
+        prog="tenet",
+        description="Process dataset/model files and generate HLS artifacts for TENET",
     )
     
     # subparsers = parser.add_subparsers(dest="command", required=True, help="Sub-command to execute")

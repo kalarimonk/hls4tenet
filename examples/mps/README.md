@@ -15,7 +15,7 @@ The dataset folder contains:
 | File | Contents |
 |---|---|
 | `MPS_poly_N4.npz` | Trained model. One tensor per site, with keys `site0` … `site3` in chain order. This can be exported from the tn4ml `.pkl` version as explained below |
-| `MPS_poly_N4.pkl` | The same model as a pickled [tn4ml](https://github.com/bsc-quantic/tn4ml) `TensorNetwork`. Also accepted by the tool, but loading it needs `tn4ml`. |
+| `MPS_poly_N4.pkl` | The same model as a pickled [tn4ml](https://github.com/bsc-quantic/tn4ml) `TensorNetwork`. Also accepted by the tool, but loading it needs the optional `tn4ml` extra (`pip install "hls4tenet[tn4ml]"`). |
 | `X_N4_embedded.bin` | Embedded inputs as raw float64, shape (1000, 4, 3), row-major, no header. This is the C-sim testbench input. |
 | `X_N4_embedded.txt` | Same values as the `.bin`, one per line. |
 | `outputs_N4_norm_false.txt` | Software (floating-point) model outputs, 1000 × 5 values, one per line, sample by sample. Use this as the C-sim reference. |
@@ -47,10 +47,11 @@ tenet examples/mps/dataset/MPS_poly_N4.npz mps -w 18 -i 8 -c \
 Compare the C-sim results file (`generated_hls/results.txt`) with `outputs_N4_norm_false.txt`.
 Both are 5 values per sample, in the same order.
 
-To use your own tn4ml MPS, convert it to `.npz` once on a machine where tn4ml runs:
+To use your own tn4ml MPS, convert it to `.npz` once on a machine where tn4ml runs
+(installed with `pip install "hls4tenet[tn4ml]"`):
 
 ```python
-from hls_tenet.processor import export_mps_npz
+from hls4tenet.processor import export_mps_npz
 export_mps_npz("MY_MODEL.pkl", "MY_MODEL.npz")
 ```
 

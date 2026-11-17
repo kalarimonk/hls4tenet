@@ -1,184 +1,169 @@
+# hls4tenet
 
-# High Level Synthesis (HLS) based Hardware Implementation of Tree Tensor Networks (TTN)
+[![CI](https://github.com/kalarimonk/hls4tenet/actions/workflows/ci.yml/badge.svg)](https://github.com/kalarimonk/hls4tenet/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)
 
-This project is developed to provide a HLS based framework to ease the design and hardware implementation of tensor networks on hardware accelerators like FPGAs with the primary application being classification of jet-substructure in the field of High Energy Physics (HEP). 
+**TENET** generates High-Level Synthesis (HLS) C++ for tensor-network machine-learning models and
+drives AMD Vitis HLS (C-simulation, synthesis, IP packaging) from a single command, without opening
+the Vitis GUI. It supports **Matrix Product States (MPS)** and **Tree Tensor Networks (TTN)**, and
+is used to deploy jet-substructure classifiers for High Energy Physics on FPGAs.
 
-
-**Prerequisites**:  `Vitis`, `Vivado`, `Python3`
-
-## Directory structure
-
-The repository is organized as follows:
-
-```
-.
-├── README.md
-├── datasets/
-├── results/
-│    ...
-├── hls_config.cfg
-├── hls_contraction.h
-├── hls_dispatcher.cpp
-├── hls_dispatcher.h
-├── hls_tenet.cpp
-├── hls_tenet.h
-├── hls_tensor.h
-├── hls_weights.h
-│    ...
-│    ...
-├── tenet_tb.cpp
-├── src
-│   ├── NumpyProcessor.py
-│   ├── ArgParser.py
-│   ├── run_vitis_simulation.py
-│   └── setup.py
-├── templates
-│   |── dispatcher.h.in
-│   |── tenet.h.in
-│   └── tensors.h.in
-├── utilities
-│   ├── data_quantization.cpp
-│   ├── old_misc/
-
+```bash
+pip install "hls4tenet @ git+https://github.com/kalarimonk/hls4tenet.git@v0.1.0rc1"
+tenet model.npz mps -w 16 -i 6
 ```
 
-The folders `datasets` and `results` are representative of where the datasets and results are placed. 
+## Features
 
-## TENET
+- Reads trained tensor-network models: MPS from [tn4ml](https://github.com/bsc-quantic/tn4ml)
+  (`.pkl`) or numpy (`.npz`), TTN from numpy (`.npz`).
+- Generates model-specific HLS sources (weights, dimensions, contraction kernels, testbench) in
+  configurable `ap_fixed` precision.
+- Optionally runs Vitis HLS C-simulation, synthesis and RTL IP packaging.
 
-The tool allows the user to process the dataset/model, generate HLS code dependent on the model and run Vitis tasks like C-Simulation, Synthesis and RTL Packaging all in a single execution without ever launching the Vitis GUI. The following is a short-guide on how to setup and run this tool
+## Requirements
 
-### HLS Configuration
+- Python 3.10 – 3.14
+- AMD Vitis / Vivado: only needed to run C-simulation, synthesis or packaging. Generating HLS
+  sources works without it.
+- Optional: [tn4ml](https://github.com/bsc-quantic/tn4ml), only for reading MPS models saved as
+  tn4ml `.pkl` files. It needs JAX and therefore a CPU with AVX support. `.npz` models need only
+  numpy (see [Model formats](#model-formats)).
 
-The `hls_config.cfg` file maintains a list of parameters required by Vitis for the execution of its tasks. These include the FPGA part, clock and target files to name a few. Update this file according to your requirements.
+## Installation
 
-The Vitis C-simulation uses the `tenet_tb.cpp` file as the test bench. The arguments to the test bench must be updated in the `hls_config.cfg` configuration file as follows.
+> **Pre-release:** hls4tenet is not yet on PyPI. Install a tagged release candidate from GitHub.
 
-```
-csim.argv = <absolute_path_to_weights_file> <absolute_path_to_input_data_file> <absolute_path_to_output_results_file>
-
-```
-
-### Dataset and Tensor Networks based ML Model
-
-The dataset files and the weights of the tensor network based ML model trained on the dataset are provided as `.npy` and `.npz` numpy formats respectively. These files are stored under the sub-folders `set1, set2, ...` under the datasets folder.
-
-Note: The model is not trained in this project rather obtained from a sister-project for our hardware implementation
-
-### Running the tool
-
-Before running the tool, the user must source the Vitis tool by running the following command
-
-
-```
-Linux
-
-$ source /tools/Xilinx/Vitis/<version>/settings64.sh
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install "hls4tenet @ git+https://github.com/kalarimonk/hls4tenet.git@v0.1.0rc1"
+tenet --help
 ```
 
+To also read MPS models saved as tn4ml `.pkl` files, install the `tn4ml` extra:
 
-```
-Windows
-
-$ C:\Xilinx\Vitis\<version>\settings64.bat
-```
-
-Next move to the `src` directory of the project
-```
-$ cd src
+```bash
+pip install "hls4tenet[tn4ml] @ git+https://github.com/kalarimonk/hls4tenet.git@v0.1.0rc1"
 ```
 
-In this section, I list the various ways to utilize the TENET tool. The file `setup.py` is the single execution entry point for all the tasks the user chooses to run.
+Once released on PyPI:
+
+```bash
+pip install hls4tenet            # TTN and MPS .npz models
+pip install "hls4tenet[tn4ml]"   # also MPS tn4ml .pkl models
+```
+
+The package is installed and imported as `hls4tenet`, and provides the command-line tool `tenet`
+(also available as `python -m hls4tenet`).
+
+## Quick start
+
+Generate HLS sources for the bundled 4-site MPS example:
+
+```bash
+git clone https://github.com/kalarimonk/hls4tenet.git
+cd hls4tenet
+tenet examples/mps/dataset/MPS_poly_N4.npz mps -w 16 -i 6
+```
+
+The sources are written to `./generated_hls/`. To also run C-simulation, source Vitis and pass
+the testbench input:
+
+```bash
+source /tools/Xilinx/Vitis/<version>/settings64.sh
+tenet examples/mps/dataset/MPS_poly_N4.npz mps -w 16 -i 6 -c \
+      -tb examples/mps/dataset/X_N4_embedded.bin
+```
+
+## Usage
+
+```text
+tenet [-h] [-w W] [-i I] [-clock CLOCK] [-c] [-tb TB_DATA] [-b] [-p] model_path {mps,ttn}
+```
+
+| Argument | Description | Default |
+|---|---|---|
+| `model_path` | Trained model file (`.pkl` or `.npz`) | required |
+| `{mps,ttn}` | Tensor-network structure | required |
+| `-w` | Total bit width of the `ap_fixed` type | `16` |
+| `-i` | Integer bits of the `ap_fixed` type | `2` |
+| `-clock` | Target clock period in ns | `4.0` |
+| `-c`, `--csim` | Run Vitis C-simulation (requires `-tb`) | off |
+| `-tb`, `--tb_data` | Testbench input, raw `float64` `.bin` | – |
+| `-b`, `--build` | Run synthesis | off |
+| `-p`, `--pack` | Export an RTL IP package (runs synthesis) | off |
+
+For example, `-w 16 -i 6` produces `ap_fixed<16, 6>`.
+
+### Model formats
+
+| Network | Format | Contents |
+|---|---|---|
+| MPS | `.pkl` | A tn4ml model saved with `tn4ml.models.model.save_model`. Needs the `tn4ml` extra and an AVX-capable CPU. |
+| MPS | `.npz` | One array per site, keys `site0`, `site1`, … in chain order. Each site has shape `(left, right, physical)`, and the label site has an extra class axis. |
+| TTN | `.npz` | One array per node, keys `"<layer>.<index>"`, root `"0.0"`. |
+
+To convert an MPS `.pkl` to `.npz` (on a machine where tn4ml runs):
 
 ```python
-$ python setup.py --help
-usage: setup.py [-h] [-c] [-b] [-p] [--top-iso-ttn] directory_path
-
-Process the dataset to obtain binaries for HLS processing
-
-positional arguments:
-  directory_path  Path to the dataset to be processed
-
-optional arguments:
-  -h, --help      show this help message and exit
-  -c, --csim      Run C-Simulation
-  -b, --build     Run Synthesis build
-  -p, --pack      Run Synthesis and Create RTL IP Package
-  --top-iso-ttn   Top-Isometrized TTN
-
+from hls4tenet.processor import export_mps_npz
+export_mps_npz("model.pkl", "model.npz")
 ```
 
-The user must specify the folder of the model files as it is the primary requirement of the HLS code generation. After specifying the dataset folder the user can specify the Vitis task they wish to execute. 
+Both formats produce identical HLS sources.
 
-**Note**: However, do not specify the `-b` option alongside RTL packaging `-p`, since the tool internally runs the synthesis prior creating the RTL package. The result of the C-simultation will be stored at the output location specified in the configuration file under `csim.argv`
+### Outputs
 
+| Path | Contents |
+|---|---|
+| `generated_hls/` | Generated HLS sources, testbench, `hls_config.cfg` and, after C-simulation, `results.txt`. **Recreated on every run.** |
+| `tenet_workspace/tenet_comp/` | Vitis workspace and component: reports, logs and the IP package `run_tenet.zip`. Can be opened in the Vitis GUI. |
 
-```python
-Examples
-1.python setup.py ../datasets/set1 -c  (Runs C-Simulation)
+Both are created in the current working directory.
 
-2.python setup.py ../datasets/set1 -b (Runs Synthesis)
+### Using the sources in the Vitis GUI
 
-3.python setup.py ../datasets/set1 -cp (Runs C-Simulation, RTL packaging)
+Run `tenet` without `-c`, `-b` or `-p`. Then add the files in `generated_hls/` to an HLS
+component, with `tenet_tb.cpp` as the testbench and `run_tenet` as the top function.
 
+## Examples
+
+| Example | Description |
+|---|---|
+| [`examples/mps`](examples/mps/README.md) | 4-site MPS classifier, testbench data, hardware results and SW/HW comparison notebook |
+| [`examples/ttn`](examples/ttn/README.md) | Symmetric and asymmetric TTN classifiers, testbench data, hardware results and notebook |
+
+## Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| `vitis executable not found in PATH` | Source `settings64.sh` from your Vitis installation in the same shell. |
+| Vitis reports the workspace is in use | Delete `tenet_workspace/` and run again. |
+| `jaxlib was built using AVX instructions` | The CPU does not expose AVX. Use the `.npz` model format, or run on an AVX-capable machine. |
+| `Loading .pkl MPS models requires tn4ml` | tn4ml is not installed or failed to import. Run `pip install "hls4tenet[tn4ml]"`, or use an `.npz` model. |
+
+## Development
+
+```bash
+git clone https://github.com/kalarimonk/hls4tenet.git
+cd hls4tenet
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+
+pytest              # unit tests
+ruff check src tests
+python -m build     # sdist + wheel in dist/
 ```
 
-All Vitis tasks require a workspace folder and a Vitis component to be executed. The `tenet_workspace` folder in the root of the repository provides this workspace. If the folder does not exist, the tool creates a folder with the same name. Under this workspace folder, a folder named `tenet_comp` exists which is the component folder for tasks to be operated upon.
+The package version comes from git tags (`hatch-vcs`). Pushing a tag `vX.Y.Z` publishes to PyPI
+through the release workflow. Release-candidate tags (`vX.Y.ZrcN`) are not published and are
+meant for installing from GitHub.
 
-The component folder is also the location of the simulation and synthesis reports, alongside the RTL package which is generated as `run_tenet.zip`. The zip file consists of all the HDL files needed by Vivado from Vitis to generate the bit-stream. Note, however there is still some in-Vivado work that needs to be done before generating the final bit-stream to be loaded into the FPGA.
+## Citation
 
-After executing the tasks, the component `tenet_comp` can also be loaded using the Vitis GUI to view the reports, play around and re-run tasks as one would do if using just the Vitis GUI.
+<!-- TODO: add the paper / BibTeX entry to cite. -->
 
-### Running only Vitis tasks
+## License
 
-The user can run the entire set of tasks as specified in the above section. However after running `setup.py`, the user maynot want to run the dataset/model file processing step. In such case, one can execute just the vitis task using the `run_vitis_tasks.py` script with the same task options as above.
-
-```
-$ vitis -s run_vitis_tasks.py -h
-
-usage: run_vitis_tasks.py [-h] [-c] [-b] [-p]
-
-Arguments for Vitis tasks
-
-optional arguments:
-  -h, --help   show this help message and exit
-  -c, --csim   Run C-Simulation
-  -b, --build  Run Synthesis build
-  -p, --pack   Create RTL IP
-```
-
-
-### Running as a model processor
-
-The tool can also be used just to generate the HLS code and then the user can open Vitis GUI and continue operating as a standard user. For this purpose, after cloning the repository create a Vitis project and add the following files as sources and test bench. 
-
-```
-├── sources
-│   ├── hls_contraction.h
-│   ├── hls_dispatcher.cpp
-│   ├── hls_dispatcher.h
-│   ├── hls_tenet.cpp
-│   ├── hls_tenet.h
-│   ├── hls_tensor.h
-│   ├── hls_weights.h
-├── Test Bench
-│   └── tenet_tb.cpp
-
-```
-
-The following command can be run to update the HLS files depending on the user's model/data location and the user can then continue tinkering with these in Vitis.
-
-```python
-$ python setup.py ../datasets/set2
-```
-
-
-## Common Errors
-
-1. If the tool may throw an exception saying that the workspace is under use and fail execution. In such case just delete the `tenet_workspace` folder and re-run the tool. This should fix this error.
-
-2. Forgetting to run the source command for vitis will also fail execution of the vitis tasks, always remember to run the source vitis command.
-
-
-
-
+<!-- TODO: choose a license and add a LICENSE file. -->

@@ -2,12 +2,12 @@
 /*_workspace*
 /_ide
 /dev_env
-/hls4tenet
 /hls_compo*
 /*.vscode/
 *__pycache__
 *.wsdata
 *.Xil
+.venv/
 
 # Ignore build output directory
 /build

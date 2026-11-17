@@ -5,13 +5,13 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from hls_tenet import mps_generators
-from hls_tenet.processor import MPSProcessor, export_mps_npz
-from hls_tenet.tool_configuration import ToolConfiguration
+from hls4tenet import mps_generators
+from hls4tenet.processor import MPSProcessor, export_mps_npz
+from hls4tenet.tool_configuration import ToolConfiguration
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MPS_N4_PKL = REPO_ROOT / "examples" / "mps" / "dataset" / "MPS_poly_N4.pkl"
-MPS_TEMPLATES = REPO_ROOT / "src" / "hls_tenet" / "templates" / "mps"
+MPS_TEMPLATES = REPO_ROOT / "src" / "hls4tenet" / "templates" / "mps"
 
 STATE_ATTRS = (
     "num_nodes",
@@ -107,13 +107,38 @@ def test_mps_npz_does_not_import_tn4ml(tmp_path):
     _synthetic_mps(npz_path)
     code = (
         "import sys\n"
-        "from hls_tenet.processor import MPSProcessor\n"
-        "from hls_tenet.tool_configuration import ToolConfiguration\n"
+        "from hls4tenet.processor import MPSProcessor\n"
+        "from hls4tenet.tool_configuration import ToolConfiguration\n"
         "c = ToolConfiguration()\n"
         f"c.model_files_path = {str(npz_path)!r}\n"
         "MPSProcessor(c)\n"
         "heavy = sorted({m.split('.')[0] for m in sys.modules} & {'tn4ml', 'jax', 'jaxlib', 'quimb'})\n"
         "assert not heavy, heavy\n"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        capture_output=True,
+        text=True,
+        env={"PYTHONPATH": str(REPO_ROOT / "src")},
+    )
+    assert result.returncode == 0, result.stderr
+
+
+def test_mps_pkl_without_tn4ml_gives_install_hint():
+    # tn4ml is an optional extra: simulate it being absent by blocking the import
+    code = (
+        "import sys\n"
+        "sys.modules['tn4ml'] = None\n"
+        "from hls4tenet.processor import MPSProcessor\n"
+        "from hls4tenet.tool_configuration import ToolConfiguration\n"
+        "c = ToolConfiguration()\n"
+        f"c.model_files_path = {str(MPS_N4_PKL)!r}\n"
+        "try:\n"
+        "    MPSProcessor(c)\n"
+        "except RuntimeError as e:\n"
+        "    assert 'hls4tenet[tn4ml]' in str(e), str(e)\n"
+        "else:\n"
+        "    raise AssertionError('expected RuntimeError')\n"
     )
     result = subprocess.run(
         [sys.executable, "-c", code],

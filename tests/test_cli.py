@@ -3,9 +3,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from hls_tenet.cli import main, run_generation, tenet_args
-from hls_tenet.processor import TTNProcessor, matches_node_pattern, process_directory
-from hls_tenet.tool_configuration import ToolConfiguration
+from hls4tenet.cli import main, run_generation, tenet_args
+from hls4tenet.processor import TTNProcessor, matches_node_pattern, process_directory
+from hls4tenet.tool_configuration import ToolConfiguration
 
 
 def test_tenet_args_defaults():
@@ -121,7 +121,7 @@ def test_main_rejects_tb_data_without_csim(tmp_path, capsys, monkeypatch):
 def test_ttn_template_resources_are_packaged():
     import importlib.resources as resources
 
-    template_root = resources.files("hls_tenet").joinpath("templates", "ttn")
+    template_root = resources.files("hls4tenet").joinpath("templates", "ttn")
 
     assert template_root.joinpath("tenet.cpp.in").is_file()
     assert template_root.joinpath("dispatcher.cpp.in").is_file()
