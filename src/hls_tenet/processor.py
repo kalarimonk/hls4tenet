@@ -179,34 +179,53 @@ class MPSProcessor:
         
     def parse_software_model(self, model_path: Path) -> None:
         self.reset_state()
-        
-        print(f"Parsing software MPS model: {model_path.parent / model_path.stem}")
-        # Why here?
-        from tn4ml.models.model import load_model
+        model_path = Path(model_path)
+        print(f"Parsing software MPS model: {model_path}")
 
-        model = load_model(f"{model_path.parent / model_path.stem}")
-        print(type(model))
-        self.num_nodes = model.L
-        self.num_features = model.L
-        self.max_bond_dim = model.max_bond()
-        
-        tensor_id = 0
-        for tensor in model.tensors:
-            # print("\nProcessing tensor with shape:", len(tensor.shape))
+        if model_path.suffix == ".npz":
+            # Plain numpy: no tn4ml / jax needed. Expects keys site0, site1, ... in chain order.
+            data = np.load(model_path)
+            keys = sorted((k for k in data.files if k.startswith("site")), key=lambda k: int(k[4:]))
+            if not keys:
+                raise ValueError(f"{model_path}: no 'site<i>' arrays found")
+            tensors = [data[k] for k in keys]
+            # max over the two virtual bonds (axes 0, 1); equals quimb's max_bond()
+            self.max_bond_dim = max(max(t.shape[0], t.shape[1]) for t in tensors)
+        else:
+            # Imported lazily so that .npz models work without tn4ml/jax installed.
+            try:
+                from tn4ml.models.model import load_model
+            except Exception as exc:  # ImportError, or jaxlib's AVX RuntimeError
+                raise RuntimeError(
+                    "Loading .pkl MPS models requires tn4ml (pip install 'tn4ml>=1.1.0') and a "
+                    "CPU supported by jax. Alternatively convert the model to .npz with "
+                    "hls_tenet.processor.export_mps_npz on a machine where tn4ml works."
+                ) from exc
+            model = load_model(f"{model_path.parent / model_path.stem}")
+            tensors = [t.data for t in model.tensors]
+            self.max_bond_dim = model.max_bond()
 
-            if len(tensor.shape) == 3:
-                a, b, c = tensor.shape
-                self.tensor_metadata.append((a, b, c))
-                self.tensor_values.append(tensor.data.tolist())
-            elif len(tensor.shape) == 4:
-                a, b, c, d = tensor.shape
+        self.num_nodes = self.num_features = len(tensors)
+        for tensor_id, t in enumerate(tensors):
+            if t.ndim == 4:
                 self.label_site_id = tensor_id
-                self.classes = d
-                self.tensor_metadata.append((a, b, c, d))
-                self.tensor_values.append(tensor.data.tolist())           
-            tensor_id += 1
-        self.phy_bond_dim = c # The physical bond dimension is the last one in the shape of the tensors [bond_left, bond_right, phy_bond_dim]
-    
+                self.classes = t.shape[3]
+            elif t.ndim != 3:
+                raise ValueError(f"site{tensor_id}: unexpected tensor rank {t.ndim}")
+            self.tensor_metadata.append(tuple(t.shape))
+            self.tensor_values.append(np.asarray(t).tolist())
+        # Tensor layout is [bond_left, bond_right, phy_bond_dim(, label)] -> physical dim is axis 2
+        self.phy_bond_dim = tensors[-1].shape[2]
+
     def calculate_bits_to_pack(self) -> int:
         self.bits_to_pack = self.phy_bond_dim * self.num_features * self.word_depth
         return self.bits_to_pack
+
+
+def export_mps_npz(pkl_path: Path, npz_path: Path) -> None:
+    """Convert a tn4ml MPS .pkl into the .npz format read by MPSProcessor (needs tn4ml)."""
+    from tn4ml.models.model import load_model
+
+    pkl_path = Path(pkl_path)
+    model = load_model(f"{pkl_path.parent / pkl_path.stem}")
+    np.savez(npz_path, **{f"site{i}": np.asarray(t.data) for i, t in enumerate(model.tensors)})
