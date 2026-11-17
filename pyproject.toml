@@ -3,42 +3,58 @@ requires = ["hatchling>=1.27.0", "hatch-vcs>=0.4.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "hls-tenet"
+name = "hls4tenet"
 dynamic = ["version"]
-description = "CLI tool to generate TTN HLS sources and orchestrate Vitis HLS runs"
+description = "CLI tool to generate Tensor Network HLS sources and orchestrate Vitis HLS runs"
 readme = "README.md"
-requires-python = ">=3.9"
-authors = [{ name = "TENET Contributors" }]
+requires-python = ">=3.10"
+authors = [{ name = "Prateek Gupta" }]
 dependencies = [
   "numpy>=1.23",
 ]
 
+[project.urls]
+Repository = "https://github.com/kalarimonk/hls4tenet"
+Issues = "https://github.com/kalarimonk/hls4tenet/issues"
+
 [project.optional-dependencies]
+# Needed only to read MPS models saved as tn4ml .pkl files (.npz models need just numpy).
+tn4ml = [
+  "tn4ml>=1.1.0",
+  # tn4ml 1.1.0 imports matplotlib at import time but does not declare it as a dependency
+  "matplotlib",
+]
 dev = [
+  "hls4tenet[tn4ml]",
+  "build>=1.2",
   "pytest>=8.0",
   "ruff>=0.6",
+  "twine>=5.1",
 ]
 
 [project.scripts]
-tenet = "hls_tenet.cli:main"
+tenet = "hls4tenet.cli:main"
 
 [tool.hatch.version]
 source = "vcs"
 fallback-version = "0.1.0"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/hls_tenet"]
-include = ["src/hls_tenet/templates/*.in"]
+packages = ["src/hls4tenet"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "src/hls_tenet",
+  "src/hls4tenet",
   "README.md",
 ]
 
 [tool.ruff]
 line-length = 100
-target-version = "py39"
+target-version = "py310"
+
+[tool.ruff.lint]
+# Pin the rule set so new ruff releases (CI installs the latest) don't change what is checked.
+select = ["E4", "E7", "E9", "F"]
 
 [tool.pytest.ini_options]
 addopts = "-q"
