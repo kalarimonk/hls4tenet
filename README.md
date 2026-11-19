@@ -9,7 +9,7 @@ the Vitis GUI. It supports **Matrix Product States (MPS)** and **Tree Tensor Net
 is used to deploy jet-substructure classifiers for High Energy Physics on FPGAs.
 
 ```bash
-pip install "hls4tenet @ git+https://github.com/kalarimonk/hls4tenet.git@dev-mps"
+pip install "hls4tenet @ git+https://github.com/kalarimonk/hls4tenet.git@v0.1.0rc1"
 tenet model.npz mps -w 16 -i 6
 ```
 
@@ -32,20 +32,19 @@ tenet model.npz mps -w 16 -i 6
 
 ## Installation
 
-> **Pre-release:** hls4tenet is not yet on PyPI and has no tagged release yet. Install the current
-> development branch from GitHub.
+> **Pre-release:** hls4tenet is not yet on PyPI. Install a tagged release candidate from GitHub.
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install "hls4tenet @ git+https://github.com/kalarimonk/hls4tenet.git@dev-mps"
+pip install "hls4tenet @ git+https://github.com/kalarimonk/hls4tenet.git@v0.1.0rc1"
 tenet --help
 ```
 
 To also read MPS models saved as tn4ml `.pkl` files, install the `tn4ml` extra:
 
 ```bash
-pip install "hls4tenet[tn4ml] @ git+https://github.com/kalarimonk/hls4tenet.git@dev-mps"
+pip install "hls4tenet[tn4ml] @ git+https://github.com/kalarimonk/hls4tenet.git@v0.1.0rc1"
 ```
 
 Once released on PyPI:
