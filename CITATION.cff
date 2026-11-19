@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+title: "hls4tenet: Tensor Network HLS generation for FPGAs (TENET)"
+abstract: >-
+  TENET generates High-Level Synthesis (HLS) C++ for tensor-network machine-learning
+  models, Matrix Product States (MPS) and Tree Tensor Networks (TTN), and drives
+  AMD Vitis HLS C-simulation, synthesis and IP packaging from a single command.
+authors:
+  - given-names: Prateek
+    family-names: Gupta
+repository-code: "https://github.com/kalarimonk/hls4tenet"
+license: Apache-2.0
+keywords:
+  - tensor networks
+  - FPGA
+  - high-level synthesis
+  - Vitis HLS
+  - high energy physics
+  - machine learning

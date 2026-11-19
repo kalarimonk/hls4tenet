@@ -163,8 +163,11 @@ meant for installing from GitHub.
 
 ## Citation
 
-<!-- TODO: add the paper / BibTeX entry to cite. -->
+If you use hls4tenet in your work, please cite it. The citation metadata is in
+[CITATION.cff](CITATION.cff), and GitHub's **Cite this repository** button exports it as
+APA or BibTeX. A paper describing TENET is in preparation.
 
 ## License
 
-<!-- TODO: choose a license and add a LICENSE file. -->
+Copyright 2026 Prateek Gupta and contributors. Licensed under the [Apache License, Version 2.0](LICENSE); see
+also [NOTICE](NOTICE).

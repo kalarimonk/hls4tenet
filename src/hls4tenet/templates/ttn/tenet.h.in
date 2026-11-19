@@ -1,3 +1,6 @@
+// Copyright 2026 Prateek Gupta and contributors
+// SPDX-License-Identifier: Apache-2.0
+
 #ifndef HLS_TENET_T
 #define HLS_TENET_T
 

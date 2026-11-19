@@ -8,6 +8,8 @@ dynamic = ["version"]
 description = "CLI tool to generate Tensor Network HLS sources and orchestrate Vitis HLS runs"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
 authors = [{ name = "Prateek Gupta" }]
 dependencies = [
   "numpy>=1.23",
